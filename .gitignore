@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Production build output
+dist/
+
+# All media content folders (photos and videos)
+content/
+src/content/
+public/content/
+
+# Logs & temp files
+*.log
+.DS_Store
+.env.local
+check_sizes.ps1
