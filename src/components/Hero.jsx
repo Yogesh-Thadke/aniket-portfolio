@@ -7,9 +7,8 @@ export const Hero = () => {
   const assets = useAssets();
   const profilePhotos = assets?.profile?.photos || [];
 
-  // Main featured profile photo (portrait) or fallback
+  // Main featured profile photo
   const mainPhoto = profilePhotos[0];
-  const secondaryPhoto = profilePhotos[1];
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gray-950 px-6 py-16 md:px-16">
@@ -59,7 +58,7 @@ export const Hero = () => {
           </div>
         </motion.div>
 
-        {/* Right Side: Big Rectangular Profile Photo Showcase */}
+        {/* Right Side: Big Rectangular Profile Photo Showcase (Clean single photo without corner badge) */}
         <motion.div
           className="md:w-1/2 w-full flex justify-center md:justify-end"
           initial={{ opacity: 0, x: 40 }}
@@ -79,22 +78,11 @@ export const Hero = () => {
               </div>
             )}
 
-            {/* Optional secondary badge photo overlay if available */}
-            {secondaryPhoto && (
-              <div className="absolute bottom-4 right-4 w-28 h-36 rounded-xl overflow-hidden border-2 border-indigo-500 shadow-xl hidden sm:block">
-                <img
-                  src={secondaryPhoto}
-                  alt="Aniket Portrait"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-
             {/* Gradient overlay at the bottom */}
             <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-4 left-4 text-left pointer-events-none">
-              <p className="text-white font-playfair font-semibold text-xl drop-shadow">Aniket Kadam</p>
-              <p className="text-indigo-300 text-xs tracking-wider uppercase font-sans">Photographer & Filmmaker</p>
+            <div className="absolute bottom-5 left-5 text-left pointer-events-none">
+              <p className="text-white font-playfair font-semibold text-2xl drop-shadow">Aniket Kadam</p>
+              <p className="text-indigo-300 text-xs tracking-wider uppercase font-sans mt-0.5">Photographer & Filmmaker</p>
             </div>
           </div>
         </motion.div>
