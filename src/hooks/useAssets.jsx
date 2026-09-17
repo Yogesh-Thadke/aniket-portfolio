@@ -3,7 +3,7 @@
 // HOW TO ADD NEW MEDIA OR CATEGORIES:
 // 1. Drop new files into src/content/<CategoryName>/photos/ or videos/
 //    (Create a new folder for a brand new category e.g. src/content/Weddings/)
-// 2. Run: node uploadToCloudinary.js
+// 2. Run: c
 //    This auto-uploads new files and updates cloudinary_assets.json.
 // 3. git add . && git commit -m "add new media" && git push
 //    Live site updates automatically. No code edits needed!
