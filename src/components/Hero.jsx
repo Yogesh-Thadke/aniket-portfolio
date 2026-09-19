@@ -8,7 +8,7 @@ export const Hero = () => {
   const profilePhotos = assets?.profile?.photos || [];
 
   // Main featured profile photo
-  const mainPhoto = profilePhotos[0];
+  const mainPhoto = profilePhotos[1] || profilePhotos[0];
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gray-950 px-6 py-16 md:px-16">

@@ -77,6 +77,8 @@ export default function CategoryModal({ category, onClose, assets }) {
                       src={src}
                       alt={`${category} photo ${i + 1}`}
                       className="max-w-full max-h-[62vh] object-contain rounded-lg shadow-xl select-none"
+                      loading="lazy"
+                      decoding="async"
                     />
                   )}
                 />
@@ -95,6 +97,7 @@ export default function CategoryModal({ category, onClose, assets }) {
                       src={src}
                       controls
                       autoPlay
+                      preload="auto"
                       playsInline
                       className="max-w-full max-h-[62vh] object-contain rounded-lg shadow-xl"
                     />

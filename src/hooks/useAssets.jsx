@@ -10,6 +10,27 @@
 //
 import { useState, useEffect } from "react";
 
+const optimizeCloudinaryUrl = (url, resourceType) => {
+  if (typeof url !== "string" || !url.includes("res.cloudinary.com")) return url;
+
+  const marker = `/${resourceType}/upload/`;
+  const markerIndex = url.indexOf(marker);
+  if (markerIndex === -1) return url;
+
+  const transformation = resourceType === "image"
+    ? "f_auto,q_auto,w_1600,c_limit"
+    : "f_auto,q_auto:eco,vc_auto,w_1280,br_2m,c_limit";
+  const insertAt = markerIndex + marker.length;
+  return `${url.slice(0, insertAt)}${transformation}/${url.slice(insertAt)}`;
+};
+
+const optimizeAssets = (data) => Object.fromEntries(
+  Object.entries(data).map(([category, categoryAssets]) => [category, {
+    photos: (categoryAssets?.photos || []).map((url) => optimizeCloudinaryUrl(url, "image")),
+    videos: (categoryAssets?.videos || []).map((url) => optimizeCloudinaryUrl(url, "video")),
+  }])
+);
+
 export default function useAssets() {
   const [assets, setAssets] = useState({});
 
@@ -25,21 +46,21 @@ export default function useAssets() {
       .then((data) => {
         if (data && Object.keys(data).length > 0) {
           console.log("🌐 Assets loaded from Cloudinary:", data);
-          setAssets(data);
+          setAssets(optimizeAssets(data));
         }
       })
-      .catch(() => {
+      .catch(async () => {
         // ── Local fallback mode (dev without Cloudinary JSON) ──────────────────
         // Scans local src/content/ via Vite glob. Used before first upload.
         console.warn("⚠️ cloudinary_assets.json not found. Falling back to local files.");
 
         const photoModules = import.meta.glob(
           "../content/**/photos/*.{jpg,jpeg,JPG,JPEG,png,PNG,webp,WEBP}",
-          { eager: true }
+          { import: "default" }
         );
         const videoModules = import.meta.glob(
           "../content/**/videos/*.{mp4,MP4,webm,WEBM,ogg,OGG}",
-          { eager: true }
+          { import: "default" }
         );
 
         const getCategory = (path) => {
@@ -54,13 +75,13 @@ export default function useAssets() {
 
         const photos = {};
         const videos = {};
-        for (const [path, mod] of Object.entries(photoModules)) {
-          const url = mod.default || mod;
+        for (const [path, load] of Object.entries(photoModules)) {
+          const url = await load();
           const cat = getCategory(path);
           if (cat) { if (!photos[cat]) photos[cat] = []; photos[cat].push(url); }
         }
-        for (const [path, mod] of Object.entries(videoModules)) {
-          const url = mod.default || mod;
+        for (const [path, load] of Object.entries(videoModules)) {
+          const url = await load();
           const cat = getCategory(path);
           if (cat) { if (!videos[cat]) videos[cat] = []; videos[cat].push(url); }
         }
